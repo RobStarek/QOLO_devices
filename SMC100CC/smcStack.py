@@ -3,9 +3,9 @@ from time import sleep, localtime, strftime, time
 from smc100py3 import SMC100CC
 
 """
-Controller class for stack of SMC100CC driver.
-It makes easier collective manipulation and construction.
-Requires smc100py3 module.
+Controller class for stack of SMC100CC drivers.
+It makes easier to handle multiple controllers.
+Requires smc100py3.py module.
 
 Example:
     ConstructionDict = {
