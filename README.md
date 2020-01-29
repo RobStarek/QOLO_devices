@@ -29,7 +29,7 @@ Ms.Close() #close port, when it is not needed anymore
 ***
 
 ## MDADC2
-A control module for QOLO custom ADC box v2 (from Michal Dudka). This box has AD7734 ADC inside and it is controlled by STM microcontroller via virtual serial link over USB.
+A control module for QOLO custom 8-channel ADC box v2 (from Michal Dudka). This box has AD7734 ADC inside and it is controlled by STM microcontroller via virtual serial link over USB.
 
 The provided module is used to read voltages from given channels.
 
@@ -44,8 +44,10 @@ DefaulSettings = {
 ADC = MD_ADC_v2('COM3', settings=DefaulSettings)
 #Read all channels
 data = ADC()
-#Read voltages from specified channels
+#Read voltage from specified channels
 data12 = ADC([1,2])
+#returns for example
+#{1 : 5.42, 2 : 0.01} with keys being channel numbers and values being voltage in Volts.
 #...
 #close port when done
 ADC.close()
