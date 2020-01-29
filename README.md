@@ -11,5 +11,24 @@ It's purpose is to provide a short and readable way to control the motors.
 * example.py - example how to use smcStack.py.
 
 ## MDADC2
-A control module for QOLO custom ADC box v2 (from Michal Dudka).
-(todo)
+A control module for QOLO custom ADC box v2 (from Michal Dudka). This box has AD7734 ADC inside and it is controlled by STM microcontroller via virtual serial link over USB.
+
+The provided module is used to read voltages from given channels.
+
+### Example
+```python
+#Define settings
+DefaulSettings = {
+    i: {"chop": False, "cont": False, "time": 127, "range": 0}
+    for i in range(1, 9)
+}
+#Create instance
+ADC = MD_ADC_v2('COM3', settings=DefaulSettings)
+#Read all channels
+data = ADC()
+#Read voltages from specified channels
+data12 = ADC([1,2])
+#...
+#close port when done
+ADC.close()
+```
