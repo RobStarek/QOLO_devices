@@ -1,0 +1,92 @@
+﻿ad7734_v2_manual
+8 kanálový AD převodník s 2xIO AD7734 V2.00
+
+Napájení >7.5V a menší jak 15V takže třeba 9 V (nebo 12 V).
+Vstupní rozsah:
+a) +-10V
+b) +-5V
+c) 0-5V
+d) 0+10V
+
+Kanály prý zvládnou +-16.5V aniž by to ovlivnilo měření na dalších kanálech. A prý snesou +-50V bez poškození.
+BNC konektory jsou uvnitř galvanicky spojeny a jsou spojeny se záporným pólem zdroje a s GND USB konektoru. Takže bez ohledu na to jestli máte plovoucí zdroj, určitě máte uzeměný ADC přes USB a přes PC !
+
+ADC by mělo měřit na kanálech diferenciálně, takže fluktuace v GND by neměly vadit při měření.
+Offset si vynulujte v případě potřeby externě.
+
+Připojení do PC přes FTDI (nutné drivery - VCP - Virtual Com Port ve Windows).
+Baudrate 921600
+Flow control none
+Parita žádná
+8 datových bitů
+1 stop bit
+
+Příkazy zakončujte "\r" nebo "\n"
+Na některé příkazy zařízení odpovídá "OK\r\n" když rozumí požadavku a "??\r\n" když mu nerozumí. Na jiné příkazy pak odpovídá číselně.
+Číselná odpověď je ve formátu "x,yyyyy\r\n", kde x je číslo kanálu, yyyyy je pak změřená hodnota, například "3,12345678\r\n" => na kanálu 3 změřeno 12345678 jendotek
+Po odeslání příkazu si počkejte na odpověď.
+příkazy:
+
+"single1"  - zahájí jednorázový převod na kanále 1 a po dokončení pošle číselnou odpověď
+"single2"  - totéž pro kanál 2...
+"single8"  - a pro kanál 8... a všechny další kanály
+
+"off_cont1" - vypne kontinuální převod na kanálu 1  (potvrzuje pomocí "OK\r\n")
+...
+"off_cont8"
+
+"on_cont1" - zapne kontinuální převod na kanálu 1  (potvrzuje pomocí "OK\r\n")
+...
+"on_cont8"
+
+"time1=xxx" - nastavuje čas převodu na vybraném kanálu (konkrétně čas xxx na kanále 1), vysvětlení dole (potvrzuje pomocí "OK\r\n")
+...
+"time8=xxx"
+
+"on_chop1" - zapne chop režim na kanále 1 (potvrzuje pomocí "OK\r\n")
+...
+"on_chop8"
+
+"off_chop1" - vypne chop režim na kanále 1 (potvrzuje pomocí "OK\r\n")
+...
+
+"range1=x" - nastavuje měřicí rozsah na vybraném kanále (konkrétně rozsah x na kanále 1), x je číslo 0 až 3. (potvrzuje pomocí "OK\r\n")
+...
+"range8=x" - rozsahy: 0=>(-10;10)V, 1=>(0;10)V, 2=>(-5;5)V, 3=> (0;5)V
+
+"rst" - resetuje obvod ... nedává žádnou odpověď (teoreticky může generovat falešný znak)
+
+"id" - odešle identifikační odpověď: "Device ID xxx, Serial No yyy, FW z.zz\r\n", Device ID je číslo určující že jde o ADC18+ a Serial No je číslo konkrétního kusu (na krabici), FW je verze firmwaru
+
+
+po zapnutí kontinuálního režimu začne "chrlit" číselná data. formát číselné zprávy je nahoře a každá zpráva obsahuje idenfikaci kanálu. odhadovaná prostupnost komunikační linky je okolo 2000-2500 převodů/s ... čip nijak nehlídá její překročení a pak prostě nějaké výsledky AD převodu vypustí ... v případě potřeby lze tyto hodnoty navýšit.
+
+Pro rozsah: 0-10V se napětí spočítá  U=ADC_value * 10 / 2^24
+Pro rozsah: 0-5V se napětí spočítá   U=ADC_value * 5 / 2^24
+Pro rozsah: +-5V se napětí spočítá   U=(ADC_value * 10 / 2^24) - 5
+Pro rozsah: +-10V se napětí spočítá   U=(ADC_value * 20 / 2^24) - 10
+
+(jinak řečeno vždy se 24bitový rozsah hodnot "natáhne" na zvolený rozsah ADC)
+
+ADC běží na frekvenci MCLK = 2.5MHz (datasheet používá clock 6.144MHz). Konverzní čas lze spočítat podle:
+čas[us] = (time * 128 + 248) / MCLK při jednokanálovém měření a zapnutém chop (time je vaše nastavení v rozsahu 2 - 127)
+čas[us] = (time * 128 + 249) / MCLK při vícekanálovém (kontinuálním) měření a zapnutém chop (time je vaše nastavení v rozsahu 2 - 127)
+čas[us] = (time * 64 + 206) / MCLK při jednokanálovém měření a vypnutém chop (time je vaše nastavení v rozsahu 3 - 127)
+čas[us] = (time * 64 + 207) / MCLK při vícekanálovém (kontinuálním) měření a vypnutém chop (time je vaše nastavení v rozsahu 3 - 127)
+
+
+dodatky:
+Napájecí MINI DIN konektor (4 kontakty)
+
+pohled na zadní stranu krabičky (vidíte díry !):
+
+   2  3
+  1    4
+    --
+
+1 - GND (-) 
+2 - Vcc (+)
+3 - Není připojen (nepřipojovat)
+4 - Není připojen (nepřipojovat)
+
+    
