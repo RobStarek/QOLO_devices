@@ -99,7 +99,6 @@ class CustomTrigCoincidenceOrder(TimeTagger.CustomMeasurement):
         # The lock is already acquired within the backend.
         # start trigger by a virtual first trigger
         if OPT_TRIG_1ST_SW:
-            print("Trig...")
             first_virtual_timestamp = np.array(
                 [(0, 0, self.trig_channel, 0)], dtype=TAGFORMAT)
             self.last_timestamp, self.t0, self.t1, self.coincidence_register, self.valid =\
