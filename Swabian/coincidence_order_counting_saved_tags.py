@@ -136,7 +136,15 @@ def iterate_chunks(fn, chunk_size = 1024):
             i = tagfile.tell()
             yield data
 
-
+def iterate_chunks_filereader(file_reader_object, chunksize=1024):   
+    while file_reader_object.hasData():
+        data = file_reader_object.getData(chunksize)            
+        chunk = np.empty((chunksize,), dtype = TAGFORMAT)
+        chunk['overflow'] = data.getOverflows()
+        chunk['time'] = data.getTimestamps()
+        chunk['channel'] = data.getChannels()
+        yield chunk
+        
 if __name__ == '__main__':    
     fn = "myfile.dat"
     chunk_generator = iterate_chunks(fn, 2*1024*1024)
