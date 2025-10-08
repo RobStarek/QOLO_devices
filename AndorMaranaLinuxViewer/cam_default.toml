@@ -1,0 +1,10 @@
+exposure_s = 0.05 #i.e. 50 ms
+gain_mode = "12-bit (low noise)" #choice: "12-bit (low noise)", "16-bit (high dynamic range)"
+temperature = '0.0' #choice: '0.0', '-25.0', '-45.0', really it is a string
+cooling = true
+roi_left = 450
+roi_top = 490
+roi_width = 1024
+roi_height = 1024
+setup = "last" #choice: "last" or "default"
+save_transform = true
