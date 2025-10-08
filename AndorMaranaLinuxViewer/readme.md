@@ -4,4 +4,7 @@ These two scripts are taking care of displaying images from Andor Marana camera 
 Use it by running `GrabGUI.py`. Configuration is written in the self-explanatory `config.toml`.
 
 
+This display script can be straightforwardly adopted to other cameras by modifying `GrabThread.py` which interfaces the camera SDK to the GUI module.
+
+
 Note that we did not implemented all features, just what we needed.
